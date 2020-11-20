@@ -9,6 +9,11 @@
 #include <string.h>
 #include "mpsse.h"
 #include "support.h"
+#if LIBFTDI1 == 1
+  #include <libftdi1/ftdi.h>
+#else
+  #include <ftdi.h>
+#endif
 
 /* Builds a block buffer for the Fast* functions. For internal use only. */
 int fast_build_block_buffer(struct mpsse_context *mpsse, uint8_t cmd, unsigned char *data, int size, int *buf_size)
@@ -64,9 +69,9 @@ int FastWrite(struct mpsse_context *mpsse, char *data, int size)
 				{
 					txsize = mpsse->xsize;
 				}
-	
+
 				if(fast_build_block_buffer(mpsse, mpsse->tx, (unsigned char *) (data + n), txsize, &buf_size) == MPSSE_OK)
-				{	
+				{
 					if(raw_write(mpsse, fast_rw_buf, buf_size) == MPSSE_OK)
 					{
 						n += txsize;
@@ -90,7 +95,7 @@ int FastWrite(struct mpsse_context *mpsse, char *data, int size)
 			}
 		}
 	}
-		
+
 	return MPSSE_FAIL;
 }
 
@@ -144,11 +149,11 @@ int FastRead(struct mpsse_context *mpsse, char *data, int size)
 			}
 		}
 	}
-	
+
 	return MPSSE_FAIL;
 }
 
-/* 
+/*
  * Function to perform fast transfers in MPSSE.
  *
  * @mpsse - libmpsse context pointer.
@@ -203,5 +208,3 @@ int FastTransfer(struct mpsse_context *mpsse, char *wdata, char *rdata, int size
 
 	return MPSSE_FAIL;
 }
-
-

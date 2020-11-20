@@ -1,0 +1,8 @@
+src/Makefile
+src/config.h
+src/config.status
+src/*.o
+src/*.a
+src/*.so
+src/*.log
+src/examples/gpio
